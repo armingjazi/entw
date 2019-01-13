@@ -1,2 +1,2 @@
 # entw
-cross platform web builder
+barebone cmake project with gtest
