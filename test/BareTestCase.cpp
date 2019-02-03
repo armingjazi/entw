@@ -1,7 +1,7 @@
 #include <include/gmock/gmock.h>
 #include <include/gtest/gtest.h>
 
-#include <core/inc/Bare.h>
+#include <Bare.h>
 
 using namespace testing;
 
@@ -9,7 +9,7 @@ namespace entw
 {
     TEST(UnitTest_Bare, bare)
     {
-        Bare bare;
+        Bare bare{};
 
         bare.set(10);
 

@@ -1,7 +1,4 @@
-set(entw_core_src
-        src/Bare.cpp inc/Bare.h)
-
-add_library(entw_core ${entw_core_src})
+add_library(entw_core src/Bare.cpp)
 
 target_include_directories(entw_core
         PUBLIC
