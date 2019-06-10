@@ -1,0 +1,10 @@
+dist: xenial
+sudo: false
+language: cpp
+
+script:
+  - mkdir cmake-build
+  - cd cmake-build
+  - cmake ../
+  - cmake --build .
+  - cd test/ && ./run_all_tests

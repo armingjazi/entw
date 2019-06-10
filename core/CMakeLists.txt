@@ -1,4 +1,4 @@
-add_library(entw_core src/Bare.cpp)
+add_library(entw_core src/TestCase.cpp)
 
 target_include_directories(entw_core
         PUBLIC
