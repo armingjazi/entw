@@ -4,6 +4,6 @@
 
 int main(int argc, char **argv) {
   entw::TestCaseTestCase testCase_;
-  testCase_.include();
+  testCase_.describe();
   testCase_.run();
 }

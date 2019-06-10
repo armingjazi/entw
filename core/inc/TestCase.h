@@ -6,15 +6,15 @@ namespace entw {
 class TestCase {
  public:
   TestCase() = default;
-  using TestMethodType = std::function<void(void)>;
+  using test = std::function<void(void)>;
 
   void run();
 
-  void test(TestMethodType& method);
+  void it(test &method);
 
-  virtual void include() = 0;
+  virtual void describe() = 0;
 
-  TestMethodType testMethod_;
+  test testMethod_;
 };
 
 } // namespace entw

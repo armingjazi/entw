@@ -4,7 +4,7 @@ namespace entw {
 void TestCase::run() {
   testMethod_();
 }
-void TestCase::test(TestCase::TestMethodType &method) {
+void TestCase::it(TestCase::test &method) {
   testMethod_ = method;
 }
 } // namespace entw

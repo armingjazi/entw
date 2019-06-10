@@ -1,17 +1,17 @@
 #pragma once
-#include <iostream>
 #include <TestCase.h>
+#include <assert.h>
 
 namespace entw {
 class TestCaseUser : public TestCase {
  public:
-  void include() override {
-    test(test_method);
+  void describe() override {
+    it(test_method);
   }
 
   bool wasRun_ = false;
 
-  TestMethodType test_method = [&] () {
+  test test_method = [&] () {
     wasRun_ = true;
   };
 };
@@ -22,13 +22,13 @@ class TestCaseTestCase : public TestCase {
 
 
  public:
-  void include() override {
-    test(was_run);
+  void describe() override {
+    it(was_run);
   }
 
-  TestMethodType was_run = [&] () {
+  test was_run = [&] () {
     assert(!testCaseUser_.wasRun_);
-    testCaseUser_.include();
+    testCaseUser_.describe();
     testCaseUser_.run();
     assert(testCaseUser_.wasRun_);
   };
