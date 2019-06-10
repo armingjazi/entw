@@ -1,38 +1,36 @@
 #pragma once
 #include <iostream>
 #include <TestCase.h>
-#include <WasRun.h>
 
 namespace entw {
-class WasRunTestCase : public TestCase {
- private:
-  WasRun test_;
-
+class TestCaseUser : public TestCase {
  public:
-  void setUp() override {
-    test_ = WasRun();
+  void include() override {
+    test(test_method);
   }
 
-  void run() override {
-    assert(!test_.wasRun());
-    test_.run();
-    assert(test_.wasRun());
-  }
+  bool wasRun_ = false;
+
+  TestMethodType test_method = [&] () {
+    wasRun_ = true;
+  };
 };
 
-class WasSetupTestCase : public TestCase {
+class TestCaseTestCase : public TestCase {
  private:
-  WasRun test_;
+  TestCaseUser testCaseUser_;
+
 
  public:
-  void setUp() override {
-    test_ = WasRun();
+  void include() override {
+    test(was_run);
   }
 
-  void run() override {
-    assert(!test_.wasSetup());
-    test_.run();
-    assert(test_.wasSetup());
-  }
+  TestMethodType was_run = [&] () {
+    assert(!testCaseUser_.wasRun_);
+    testCaseUser_.include();
+    testCaseUser_.run();
+    assert(testCaseUser_.wasRun_);
+  };
 };
 }

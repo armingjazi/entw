@@ -3,8 +3,7 @@
 #include "TestCaseTestCase.h"
 
 int main(int argc, char **argv) {
-  auto wasRunTestCase = entw::WasRunTestCase();
-  wasRunTestCase.run();
-  auto wasSetupTestCase = entw::WasSetupTestCase();
-  wasSetupTestCase.run();
+  entw::TestCaseTestCase testCase_;
+  testCase_.include();
+  testCase_.run();
 }
