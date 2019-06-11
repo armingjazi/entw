@@ -12,7 +12,7 @@ class TestCase {
 
   void it(test &method);
 
-  virtual void describe() = 0;
+  virtual void include() = 0;
 
   test testMethod_;
 };

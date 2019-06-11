@@ -5,7 +5,7 @@
 namespace entw {
 class TestCaseUser : public TestCase {
  public:
-  void describe() override {
+  void include() override {
     it(test_method);
   }
 
@@ -22,13 +22,12 @@ class TestCaseTestCase : public TestCase {
 
 
  public:
-  void describe() override {
+  void include() override {
     it(was_run);
   }
 
   test was_run = [&] () {
     assert(!testCaseUser_.wasRun_);
-    testCaseUser_.describe();
     testCaseUser_.run();
     assert(testCaseUser_.wasRun_);
   };
