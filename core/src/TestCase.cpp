@@ -3,9 +3,13 @@
 namespace entw {
 void TestCase::run() {
   include();
-  testMethod_();
+  for (auto&& testMethod : testMethods_) {
+    runBeforeEach();
+    testMethod();
+    runAfterEach();
+  }
 }
 void TestCase::it(TestCase::test &method) {
-  testMethod_ = method;
+  testMethods_.push_back(method);
 }
 } // namespace entw

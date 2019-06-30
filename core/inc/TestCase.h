@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <vector>
 
 namespace entw {
 class TestCase {
@@ -14,7 +15,11 @@ class TestCase {
 
   virtual void include() = 0;
 
-  test testMethod_;
+  virtual void runBeforeEach() = 0;
+
+  virtual void runAfterEach() = 0;
+
+  std::vector<test> testMethods_;
 };
 
 } // namespace entw
