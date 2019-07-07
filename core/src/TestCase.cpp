@@ -2,9 +2,14 @@
 
 namespace entw {
 void TestCase::run() {
-  testMethod_();
+  include();
+  for (auto&& testMethod : testMethods_) {
+    runBeforeEach();
+    testMethod();
+    runAfterEach();
+  }
 }
 void TestCase::it(TestCase::test &method) {
-  testMethod_ = method;
+  testMethods_.push_back(method);
 }
 } // namespace entw
