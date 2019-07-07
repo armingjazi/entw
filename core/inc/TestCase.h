@@ -15,9 +15,9 @@ class TestCase {
 
   virtual void include() = 0;
 
-  virtual void runBeforeEach() = 0;
+  virtual void runBeforeEach() {};
 
-  virtual void runAfterEach() = 0;
+  virtual void runAfterEach() {};
 
   std::vector<test> testMethods_;
 };
