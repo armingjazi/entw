@@ -1,15 +1,20 @@
 #include <TestCase.h>
+#include <map>
 
 namespace entw {
-void TestCase::run() {
+Report TestCase::run() {
   include();
-  for (auto&& testMethod : testMethods_) {
+  auto results = std::vector<std::string>();
+  for (auto &&test : tests_) {
     runBeforeEach();
-    testMethod();
+    if (!test()) {
+      results.emplace_back(test.name() + " test failed");
+    }
     runAfterEach();
   }
+  return Report(results);
 }
-void TestCase::it(TestCase::test &method) {
-  testMethods_.push_back(method);
+void TestCase::it(const std::string& name, const TestCase::test &method) {
+  tests_.emplace_back(name, method);
 }
 } // namespace entw
