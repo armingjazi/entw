@@ -16,8 +16,14 @@ class TestCaseUser : public TestCase {
   }
 
   void include() override {
-    it(test_method);
-    it(test_second_method);
+    it("was_run", [&]() {
+      wasRun_ = true;
+      return true;
+    });
+    it("was_second_run", [&]() {
+      secondTestWasRun_ = true;
+      return true;
+    });
   }
 
   bool wasRun_ = false;
@@ -25,19 +31,22 @@ class TestCaseUser : public TestCase {
   bool beforeEachWasRun_ = false;
   bool afterEachWasRun_ = false;
 
-  test test_method = [&] () {
-    wasRun_ = true;
-  };
+};
 
-  test test_second_method = [&] () {
-    secondTestWasRun_ = true;
-  };
+class FailingTestCase : public TestCase {
+  void include() override {
+    it("was_failed_1", [&]() {
+      return false;
+    });
+    it("was_failed_2", [&]() {
+      return false;
+    });
+  }
 };
 
 class TestCaseTestCase : public TestCase {
  private:
   std::unique_ptr<TestCaseUser> testCaseUser_;
-
 
  public:
   void runBeforeEach() override {
@@ -49,36 +58,48 @@ class TestCaseTestCase : public TestCase {
   }
 
   void include() override {
-    it(runs_test);
-    it(runs_beforeEach);
-    it(runs_second_test);
-    it(runs_afterEach);
+    it("runs_test", [&]() {
+      assert(!testCaseUser_->wasRun_);
+      testCaseUser_->run();
+      assert(testCaseUser_->wasRun_);
+      return true;
+    });
+
+    it("runs_beforeEach", [&]() {
+      assert(!testCaseUser_->beforeEachWasRun_);
+      testCaseUser_->run();
+      assert(testCaseUser_->beforeEachWasRun_);
+      return true;
+    });
+
+    it("runs_second_test", [&]() {
+      assert(!testCaseUser_->wasRun_);
+      assert(!testCaseUser_->secondTestWasRun_);
+      testCaseUser_->run();
+      assert(testCaseUser_->wasRun_);
+      assert(testCaseUser_->secondTestWasRun_);
+      return true;
+    });
+
+    it("runs_afterEach", [&]() {
+      assert(!testCaseUser_->afterEachWasRun_);
+      testCaseUser_->run();
+      assert(testCaseUser_->afterEachWasRun_);
+      return true;
+    });
+
+    it("fails", [&]() {
+      FailingTestCase failing_test_case;
+      const auto actual = failing_test_case.run().failures();
+      const auto expected = std::string("was_failed_1 test failed\nwas_failed_2 test failed");
+      assert(actual == expected);
+      return true;
+    });
+
+    it("succeeds", [&]() {
+      assert(testCaseUser_->run().failures() == "None");
+      return true;
+    });
   }
-
-  test runs_test = [&] () {
-    assert(!testCaseUser_->wasRun_);
-    testCaseUser_->run();
-    assert(testCaseUser_->wasRun_);
-  };
-
-  test runs_beforeEach = [&] () {
-    assert(!testCaseUser_->beforeEachWasRun_);
-    testCaseUser_->run();
-    assert(testCaseUser_->beforeEachWasRun_);
-  };
-
-  test runs_second_test = [&] () {
-    assert(!testCaseUser_->wasRun_);
-    assert(!testCaseUser_->secondTestWasRun_);
-    testCaseUser_->run();
-    assert(testCaseUser_->wasRun_);
-    assert(testCaseUser_->secondTestWasRun_);
-  };
-
-  test runs_afterEach = [&] () {
-    assert(!testCaseUser_->afterEachWasRun_);
-    testCaseUser_->run();
-    assert(testCaseUser_->afterEachWasRun_);
-  };
 };
 }
