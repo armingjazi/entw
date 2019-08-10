@@ -14,8 +14,7 @@ ReportPtr TestCase::run() {
     }
     runAfterEach();
   }
-  ReportFactory report_factory;
-  return report_factory.makeReport(results);
+  return ReportFactory().makeReport(results);
 }
 void TestCase::it(const std::string &name, const TestCase::test &method) {
   tests_.emplace_back(name, method);

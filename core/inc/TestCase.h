@@ -14,7 +14,7 @@ class TestCase {
   TestCase() = default;
   using test = std::function<bool(void)>;
 
-  std::unique_ptr<IReport> run();
+  ReportPtr run();
 
   void it(const std::string &name, const test &method);
 
