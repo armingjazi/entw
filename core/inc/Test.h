@@ -9,7 +9,7 @@ class Test {
  public:
   using signature = std::function<bool(void)>;
 
-  Test(std::string name, const signature &function)
+  Test(std::string name, signature function)
       : name_(std::move(name)),
         function_(std::move(function)) {
   }

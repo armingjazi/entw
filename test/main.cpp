@@ -1,5 +1,3 @@
-#include <typeinfo>
-#include <iostream>
 #include "TestCaseTestCase.h"
 #include "ExpectTestCase.h"
 #include "TestTestCase.h"

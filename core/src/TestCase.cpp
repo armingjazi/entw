@@ -1,8 +1,10 @@
-#include <TestCase.h>
 #include <map>
 
+#include "ReportFactory.h"
+#include "TestCase.h"
+
 namespace entw {
-Report TestCase::run() {
+ReportPtr TestCase::run() {
   include();
   auto results = std::vector<std::string>();
   for (auto &&test : tests_) {
@@ -12,9 +14,10 @@ Report TestCase::run() {
     }
     runAfterEach();
   }
-  return Report(results);
+  ReportFactory report_factory;
+  return report_factory.makeReport(results);
 }
-void TestCase::it(const std::string& name, const TestCase::test &method) {
+void TestCase::it(const std::string &name, const TestCase::test &method) {
   tests_.emplace_back(name, method);
 }
 } // namespace entw
