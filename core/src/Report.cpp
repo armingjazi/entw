@@ -2,19 +2,19 @@
 #include <Report.h>
 
 namespace entw {
-Report::Report(std::vector<std::string> results)
-: results_(std::move(results)) { }
-
 std::string Report::failures() {
-  if (results_.empty())
-    return "None";
   std::string report;
-  for (const auto r : results_) {
-    if (report != "")
+  for (const auto &r : results_) {
+    if (!report.empty())
       report += "\n";
-    report += r;
+    if (!r->wasSuccessful())
+      report += r->asString();
   }
+  if (report.empty())
+    return "None";
   return report;
 }
-
+void Report::add(ResultPtr result_ptr) {
+  results_.emplace_back(std::move(result_ptr));
+}
 } // namespace entw

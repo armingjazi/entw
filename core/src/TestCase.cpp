@@ -1,20 +1,18 @@
 #include <map>
 
-#include "ReportFactory.h"
+#include "Report.h"
 #include "TestCase.h"
 
 namespace entw {
 ReportPtr TestCase::run() {
   include();
-  auto results = std::vector<std::string>();
+  auto report = std::make_unique<Report>();
   for (auto &&test : tests_) {
     runBeforeEach();
-    if (!test()) {
-      results.emplace_back(test.name() + " test failed");
-    }
+    report->add(test());
     runAfterEach();
   }
-  return ReportFactory().makeReport(results);
+  return report;
 }
 void TestCase::it(const std::string &name, const TestCase::test &method) {
   tests_.emplace_back(name, method);

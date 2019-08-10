@@ -1,8 +1,9 @@
 #pragma once
-#include <assert.h>
+#include <cassert>
 #include <memory>
 
 #include <TestCase.h>
+#include <iostream>
 
 namespace entw {
 class TestCaseUser : public TestCase {
@@ -91,7 +92,7 @@ class TestCaseTestCase : public TestCase {
     it("fails", [&]() {
       FailingTestCase failing_test_case;
       const auto actual = failing_test_case.run()->failures();
-      const auto expected = std::string("was_failed_1 test failed\nwas_failed_2 test failed");
+      const auto expected = std::string("was_failed_1 failed\nwas_failed_2 failed");
       assert(actual == expected);
       return true;
     });
