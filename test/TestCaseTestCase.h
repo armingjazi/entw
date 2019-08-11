@@ -3,7 +3,6 @@
 #include <memory>
 
 #include <TestCase.h>
-#include <iostream>
 
 namespace entw {
 class TestCaseUser : public TestCase {

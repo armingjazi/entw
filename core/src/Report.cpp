@@ -1,4 +1,5 @@
 #include <string>
+
 #include <Report.h>
 
 namespace entw {
@@ -15,6 +16,6 @@ std::string Report::failures() {
   return report;
 }
 void Report::add(ResultPtr result_ptr) {
-  results_.emplace_back(std::move(result_ptr));
+  results_.emplace_back(std::move(result_ptr))
 }
 } // namespace entw
