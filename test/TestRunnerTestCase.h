@@ -48,7 +48,7 @@ public:
 
       const auto actual = results.str();
       const auto expected =
-          std::string("[\033[32mpassed\033[0m] cat follows mice");
+          std::string("[\033[32mpassed\033[0m] cat follows mice\n");
 
       assert(actual == expected);
 
@@ -67,7 +67,7 @@ public:
 
       const auto actual = results.str();
       const auto expected =
-          std::string("[\033[31mfailed\033[0m] javascript a wonderful language");
+          std::string("[\033[31mfailed\033[0m] javascript a wonderful language\n");
 
       assert(actual == expected);
 
@@ -89,7 +89,28 @@ public:
           std::string("[\033[32mpassed\033[0m] cat follows mice\n"
                       "[\033[32mpassed\033[0m] dogs follow cats\n"
                       "[\033[31mfailed\033[0m] c++ is not used anymore\n"
-                      "[\033[31mfailed\033[0m] javascript a wonderful language");
+                      "[\033[31mfailed\033[0m] javascript a wonderful language\n");
+
+      assert(actual == expected);
+
+      return true;
+    });
+
+    it("reports the multiple testcases", [&]() {
+      TestRunner testRunner {};
+
+      testRunner.add(std::make_unique<SuccessTestCase>());
+      testRunner.add(std::make_unique<FailureTestCase>());
+
+      std::stringbuf results;
+      std::ostream resultsStream(&results);
+
+      testRunner.run(resultsStream);
+
+      const auto actual = results.str();
+      const auto expected =
+          std::string("[\033[32mpassed\033[0m] cat follows mice\n"
+                      "[\033[31mfailed\033[0m] javascript a wonderful language\n");
 
       assert(actual == expected);
 

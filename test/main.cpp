@@ -3,16 +3,15 @@
 #include "TestTestCase.h"
 #include "ResultTestCase.h"
 #include "TestRunnerTestCase.h"
+#include "TestRunner.h"
 
 int main(int argc, char **argv) {
-  entw::TestCaseTestCase test_case_test_case;
-  entw::ExpectTestCase expect_test_case;
-  entw::TestTestCase test_test_case;
-  entw::ResultTestCase result_test_case;
-  entw::TestRunnerTestCase test_runner_test_case;
-  test_test_case.run();
-  test_case_test_case.run();
-  expect_test_case.run();
-  result_test_case.run();
-  test_runner_test_case.run();
+  entw::TestRunner testRunner{};
+  testRunner.add(std::make_unique<entw::TestCaseTestCase>());
+  testRunner.add(std::make_unique<entw::ExpectTestCase>());
+  testRunner.add(std::make_unique<entw::TestTestCase>());
+  testRunner.add(std::make_unique<entw::ResultTestCase>());
+  testRunner.add(std::make_unique<entw::TestRunnerTestCase>());
+
+  testRunner.run(std::cout);
 }
