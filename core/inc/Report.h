@@ -8,10 +8,11 @@
 
 namespace entw {
 class Report : public IReport {
- public:
+public:
   std::string failures() override;
   void add(ResultPtr result_ptr) override;
- private:
+
+private:
   std::vector<ResultPtr> results_;
 };
 } // namespace entw

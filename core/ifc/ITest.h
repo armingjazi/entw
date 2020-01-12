@@ -2,7 +2,7 @@
 
 namespace entw {
 class ITest {
- public:
+public:
   virtual ~ITest() = default;
   virtual ResultPtr operator()() = 0;
 };

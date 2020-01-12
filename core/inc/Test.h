@@ -7,14 +7,14 @@
 
 namespace entw {
 class Test : ITest {
- public:
+public:
   using signature = std::function<bool(void)>;
 
   Test(std::string name, signature function);
   ~Test() override = default;
   ResultPtr operator()() override;
 
- private:
+private:
   std::string name_;
   std::function<bool(void)> function_;
 };

@@ -10,7 +10,7 @@
 
 namespace entw {
 class TestCase {
- public:
+public:
   TestCase() = default;
   using test = std::function<bool(void)>;
 
@@ -20,11 +20,11 @@ class TestCase {
 
   virtual void include() = 0;
 
-  virtual void runBeforeEach() {};
+  virtual void runBeforeEach(){};
 
-  virtual void runAfterEach() {};
+  virtual void runAfterEach(){};
 
- private:
+private:
   std::vector<Test> tests_;
 };
 

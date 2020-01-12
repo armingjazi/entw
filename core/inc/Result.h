@@ -4,13 +4,13 @@
 
 namespace entw {
 class Result : public IResult {
- public:
+public:
   explicit Result(bool successful, std::string test_name);
   ~Result() override = default;
   bool wasSuccessful() const override;
   std::string asString() const override;
 
- private:
+private:
   std::string name_;
   bool passed_;
 };

@@ -4,19 +4,19 @@
 
 namespace entw {
 class ResultTestCase : public TestCase {
- public:
+public:
   void include() override {
     it("reports the failed results", [&]() {
       Result result(false, "test");
-      assert (!result.wasSuccessful());
-      assert (result.asString() == "test failed");
+      assert(!result.wasSuccessful());
+      assert(result.asString() == "test failed");
       return true;
     });
 
     it("reports the success results", [&]() {
       Result result(true, "test");
-      assert (result.wasSuccessful());
-      assert (result.asString() == "test passed");
+      assert(result.wasSuccessful());
+      assert(result.asString() == "test passed");
       return true;
     });
   }

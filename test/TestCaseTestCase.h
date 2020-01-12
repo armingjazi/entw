@@ -6,14 +6,10 @@
 
 namespace entw {
 class TestCaseUser : public TestCase {
- public:
-  void runBeforeEach() override {
-    beforeEachWasRun_ = true;
-  }
+public:
+  void runBeforeEach() override { beforeEachWasRun_ = true; }
 
-  void runAfterEach() override {
-    afterEachWasRun_ = true;
-  }
+  void runAfterEach() override { afterEachWasRun_ = true; }
 
   void include() override {
     it("was_run", [&]() {
@@ -30,32 +26,25 @@ class TestCaseUser : public TestCase {
   bool secondTestWasRun_ = false;
   bool beforeEachWasRun_ = false;
   bool afterEachWasRun_ = false;
-
 };
 
 class FailingTestCase : public TestCase {
   void include() override {
-    it("was_failed_1", [&]() {
-      return false;
-    });
-    it("was_failed_2", [&]() {
-      return false;
-    });
+    it("was_failed_1", [&]() { return false; });
+    it("was_failed_2", [&]() { return false; });
   }
 };
 
 class TestCaseTestCase : public TestCase {
- private:
+private:
   std::unique_ptr<TestCaseUser> testCaseUser_;
 
- public:
+public:
   void runBeforeEach() override {
     testCaseUser_ = std::make_unique<TestCaseUser>();
   }
 
-  void runAfterEach() override {
-    testCaseUser_ = nullptr;
-  }
+  void runAfterEach() override { testCaseUser_ = nullptr; }
 
   void include() override {
     it("runs_test", [&]() {
@@ -91,7 +80,8 @@ class TestCaseTestCase : public TestCase {
     it("fails", [&]() {
       FailingTestCase failing_test_case;
       const auto actual = failing_test_case.run()->failures();
-      const auto expected = std::string("was_failed_1 failed\nwas_failed_2 failed");
+      const auto expected =
+          std::string("was_failed_1 failed\nwas_failed_2 failed");
       assert(actual == expected);
       return true;
     });

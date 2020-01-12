@@ -1,20 +1,15 @@
 #pragma once
 
 namespace entw {
-template<typename T>
-class Expect {
- public:
-  Expect operator()(const T& a) {
-    Expect expect;
-    expect.a_ = a;
-    return expect;
-  }
+template <typename T> class Expect {
+public:
+  explicit Expect(const T &a) : a_(a){};
 
-  bool toEqual(const T& a) {
-    return this->a_ == a;
-  }
+  bool toEqual(const T &a) { return this->a_ == a; }
 
- private:
+private:
   T a_;
 };
+
+template <typename T> Expect<T> expect(const T &a) { return Expect<T>{a}; };
 }

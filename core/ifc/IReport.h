@@ -3,7 +3,7 @@
 
 namespace entw {
 class IReport {
- public:
+public:
   virtual ~IReport() = default;
   virtual std::string failures() = 0;
   virtual void add(ResultPtr result_ptr) = 0;
