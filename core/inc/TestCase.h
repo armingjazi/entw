@@ -3,7 +3,6 @@
 #include <functional>
 #include <vector>
 #include <string>
-#include <map>
 
 #include "Test.h"
 #include "IReport.h"
@@ -12,6 +11,8 @@ namespace entw {
 class TestCase {
 public:
   TestCase() = default;
+  virtual ~TestCase() = default;;
+
   using test = std::function<bool(void)>;
 
   ReportPtr run();
@@ -27,5 +28,6 @@ public:
 private:
   std::vector<Test> tests_;
 };
+using TestCasePtr = std::unique_ptr<TestCase>;
 
 } // namespace entw

@@ -5,7 +5,7 @@
 #include <TestCase.h>
 
 namespace entw {
-class TestCaseUser : public TestCase {
+class SucceedingTestCase : public TestCase {
 public:
   void runBeforeEach() override { beforeEachWasRun_ = true; }
 
@@ -28,20 +28,13 @@ public:
   bool afterEachWasRun_ = false;
 };
 
-class FailingTestCase : public TestCase {
-  void include() override {
-    it("was_failed_1", [&]() { return false; });
-    it("was_failed_2", [&]() { return false; });
-  }
-};
-
 class TestCaseTestCase : public TestCase {
 private:
-  std::unique_ptr<TestCaseUser> testCaseUser_;
+  std::unique_ptr<SucceedingTestCase> testCaseUser_;
 
 public:
   void runBeforeEach() override {
-    testCaseUser_ = std::make_unique<TestCaseUser>();
+    testCaseUser_ = std::make_unique<SucceedingTestCase>();
   }
 
   void runAfterEach() override { testCaseUser_ = nullptr; }
@@ -74,20 +67,6 @@ public:
       assert(!testCaseUser_->afterEachWasRun_);
       testCaseUser_->run();
       assert(testCaseUser_->afterEachWasRun_);
-      return true;
-    });
-
-    it("fails", [&]() {
-      FailingTestCase failing_test_case;
-      const auto actual = failing_test_case.run()->failures();
-      const auto expected =
-          std::string("was_failed_1 failed\nwas_failed_2 failed");
-      assert(actual == expected);
-      return true;
-    });
-
-    it("succeeds", [&]() {
-      assert(testCaseUser_->run()->failures() == "None");
       return true;
     });
   }

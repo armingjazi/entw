@@ -9,14 +9,14 @@ public:
     it("reports the failed results", [&]() {
       Result result(false, "test");
       assert(!result.wasSuccessful());
-      assert(result.asString() == "test failed");
+      assert(result.asString() == std::string("[\033[31mfailed\033[0m] test"));
       return true;
     });
 
     it("reports the success results", [&]() {
-      Result result(true, "test");
+      Result result(true, "another test");
       assert(result.wasSuccessful());
-      assert(result.asString() == "test passed");
+      assert(result.asString() == std::string("[\033[32mpassed\033[0m] another test"));
       return true;
     });
   }

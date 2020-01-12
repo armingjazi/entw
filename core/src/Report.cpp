@@ -18,4 +18,15 @@ std::string Report::failures() {
 void Report::add(ResultPtr result_ptr) {
   results_.emplace_back(std::move(result_ptr));
 }
+std::string Report::full() {
+  std::string report;
+  for (const auto &r : results_) {
+    if (!report.empty())
+      report += "\n";
+    report += r->asString();
+  }
+  if (report.empty())
+    return "No Tests";
+  return report;
+}
 } // namespace entw
