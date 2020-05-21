@@ -10,6 +10,7 @@ namespace entw {
 class Report : public IReport {
 public:
   std::string failures() override;
+  std::size_t countFailures() override;
   std::string full() override;
   void add(ResultPtr result_ptr) override;
 

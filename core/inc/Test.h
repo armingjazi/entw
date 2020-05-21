@@ -8,14 +8,14 @@
 namespace entw {
 class Test : ITest {
 public:
-  using signature = std::function<bool(void)>;
+  using It = std::function<void(void) noexcept(false)>;
 
-  Test(std::string name, signature function);
+  Test(std::string name, It function);
   ~Test() override = default;
   ResultPtr operator()() override;
 
 private:
   std::string name_;
-  std::function<bool(void)> function_;
+  It function_;
 };
 } // namespace entw

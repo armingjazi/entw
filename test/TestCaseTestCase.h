@@ -2,7 +2,9 @@
 #include <cassert>
 #include <memory>
 
+#include <Expect.h>
 #include <TestCase.h>
+#include <iostream>
 
 namespace entw {
 class SucceedingTestCase : public TestCase {
@@ -41,34 +43,30 @@ public:
 
   void include() override {
     it("runs_test", [&]() {
-      assert(!testCaseUser_->wasRun_);
+      expect(testCaseUser_->wasRun_).toEqual(false);
       testCaseUser_->run();
-      assert(testCaseUser_->wasRun_);
-      return true;
+      expect(testCaseUser_->wasRun_).toEqual(true);
     });
 
     it("runs_beforeEach", [&]() {
-      assert(!testCaseUser_->beforeEachWasRun_);
+      expect(testCaseUser_->beforeEachWasRun_).toEqual(false);
       testCaseUser_->run();
-      assert(testCaseUser_->beforeEachWasRun_);
-      return true;
+      expect(testCaseUser_->beforeEachWasRun_).toEqual(true);
     });
 
     it("runs_second_test", [&]() {
-      assert(!testCaseUser_->wasRun_);
-      assert(!testCaseUser_->secondTestWasRun_);
+      expect(testCaseUser_->wasRun_).toEqual(false);
+      expect(testCaseUser_->secondTestWasRun_).toEqual(false);
       testCaseUser_->run();
-      assert(testCaseUser_->wasRun_);
-      assert(testCaseUser_->secondTestWasRun_);
-      return true;
+      expect(testCaseUser_->wasRun_).toEqual(true);
+      expect(testCaseUser_->secondTestWasRun_).toEqual(true);
     });
 
     it("runs_afterEach", [&]() {
-      assert(!testCaseUser_->afterEachWasRun_);
+      expect(testCaseUser_->afterEachWasRun_).toEqual(false);
       testCaseUser_->run();
-      assert(testCaseUser_->afterEachWasRun_);
-      return true;
+      expect(testCaseUser_->afterEachWasRun_).toEqual(true);
     });
   }
 };
-}
+} // namespace entw

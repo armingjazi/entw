@@ -11,7 +11,7 @@ public:
   TestRunner() = default;
   ~TestRunner() = default;
 
-  void run(std::ostream &results);
+  int run(std::ostream &results);
   void add(TestCasePtr testCase);
 
 private:

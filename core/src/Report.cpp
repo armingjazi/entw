@@ -29,4 +29,12 @@ std::string Report::full() {
     return "No Tests";
   return report;
 }
+std::size_t Report::countFailures() {
+  std::size_t count = 0;
+  for (const auto &r : results_) {
+    if (!r->wasSuccessful())
+      ++count;
+  }
+  return count;
+}
 } // namespace entw

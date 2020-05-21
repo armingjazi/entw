@@ -4,6 +4,7 @@
 #include "ResultTestCase.h"
 #include "TestRunnerTestCase.h"
 #include "TestRunner.h"
+#include "ReportTestCase.h"
 
 int main(int argc, char **argv) {
   entw::TestRunner testRunner{};
@@ -12,6 +13,7 @@ int main(int argc, char **argv) {
   testRunner.add(std::make_unique<entw::TestTestCase>());
   testRunner.add(std::make_unique<entw::ResultTestCase>());
   testRunner.add(std::make_unique<entw::TestRunnerTestCase>());
+  testRunner.add(std::make_unique<entw::ReportTestCase>());
 
-  testRunner.run(std::cout);
+  return testRunner.run(std::cout);
 }

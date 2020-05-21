@@ -12,7 +12,10 @@ ReportPtr TestCase::run() {
   }
   return report;
 }
-void TestCase::it(const std::string &name, const TestCase::test &method) {
-  tests_.emplace_back(name, method);
+void TestCase::it(const std::string &name, const Test::It &method) {
+    tests_.emplace_back(name_.empty()? name : name_ + ": " + name, method);
+}
+void TestCase::setName(const std::string &name) {
+  name_ = name;
 }
 } // namespace entw

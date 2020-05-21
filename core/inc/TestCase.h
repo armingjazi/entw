@@ -13,11 +13,11 @@ public:
   TestCase() = default;
   virtual ~TestCase() = default;;
 
-  using test = std::function<bool(void)>;
-
   ReportPtr run();
 
-  void it(const std::string &name, const test &method);
+  void it(const std::string &name, const Test::It &method);
+
+  void setName(const std::string& name);
 
   virtual void include() = 0;
 
@@ -27,6 +27,7 @@ public:
 
 private:
   std::vector<Test> tests_;
+  std::string name_ = "";
 };
 using TestCasePtr = std::unique_ptr<TestCase>;
 

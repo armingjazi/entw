@@ -1,16 +1,18 @@
 #pragma once
 #include <cassert>
-#include <sstream>
 #include <ostream>
+#include <sstream>
 
-#include <TestCase.h>
 #include <Expect.h>
+#include <TestCase.h>
 #include <TestRunner.h>
 
 namespace entw {
 
 class SuccessTestCase : public TestCase {
 public:
+  SuccessTestCase() { setName("Success Test Case"); }
+
   void include() override {
     it("cat follows mice", [&]() { return true; });
   }
@@ -19,7 +21,9 @@ public:
 class FailureTestCase : public TestCase {
 public:
   void include() override {
-    it("javascript a wonderful language", [&]() { return false; });
+    it("javascript a wonderful language", [&]() {
+      throw std::logic_error("failed because js is not a wonderful language");
+    });
   }
 };
 
@@ -28,8 +32,14 @@ public:
   void include() override {
     it("cat follows mice", [&]() { return true; });
     it("dogs follow cats", [&]() { return true; });
-    it("c++ is not used anymore", [&]() { return false; });
-    it("javascript a wonderful language", [&]() { return false; });
+    it("c++ is not used anymore", [&]() {
+      throw std::logic_error("failed because it is used");
+      ;
+    });
+    it("javascript a wonderful language", [&]() {
+      throw std::logic_error("failed because it is not");
+      ;
+    });
   }
 };
 
@@ -37,7 +47,7 @@ class TestRunnerTestCase : public TestCase {
 public:
   void include() override {
     it("reports the succeeded tests", [&]() {
-      TestRunner testRunner {};
+      TestRunner testRunner{};
 
       testRunner.add(std::make_unique<SuccessTestCase>());
 
@@ -47,16 +57,14 @@ public:
       testRunner.run(resultsStream);
 
       const auto actual = results.str();
-      const auto expected =
-          std::string("[\033[32mpassed\033[0m] cat follows mice\n");
+      const auto expected = std::string(
+          "[\033[32mpassed\033[0m] Success Test Case: cat follows mice\n");
 
-      assert(actual == expected);
-
-      return true;
+      expect(actual).toEqual(expected);
     });
 
     it("reports the failed tests", [&]() {
-      TestRunner testRunner {};
+      TestRunner testRunner{};
 
       testRunner.add(std::make_unique<FailureTestCase>());
 
@@ -66,16 +74,15 @@ public:
       testRunner.run(resultsStream);
 
       const auto actual = results.str();
-      const auto expected =
-          std::string("[\033[31mfailed\033[0m] javascript a wonderful language\n");
+      const auto expected = std::string(
+          "[\033[31mfailed\033[0m] javascript a wonderful language\n"
+          "failed because js is not a wonderful language\n");
 
-      assert(actual == expected);
-
-      return true;
+      expect(actual).toEqual(expected);
     });
 
     it("reports the multiple tests", [&]() {
-      TestRunner testRunner {};
+      TestRunner testRunner{};
 
       testRunner.add(std::make_unique<MixTestCase>());
 
@@ -85,19 +92,19 @@ public:
       testRunner.run(resultsStream);
 
       const auto actual = results.str();
-      const auto expected =
-          std::string("[\033[32mpassed\033[0m] cat follows mice\n"
-                      "[\033[32mpassed\033[0m] dogs follow cats\n"
-                      "[\033[31mfailed\033[0m] c++ is not used anymore\n"
-                      "[\033[31mfailed\033[0m] javascript a wonderful language\n");
+      const auto expected = std::string(
+          "[\033[32mpassed\033[0m] cat follows mice\n"
+          "[\033[32mpassed\033[0m] dogs follow cats\n"
+          "[\033[31mfailed\033[0m] c++ is not used anymore\n"
+          "failed because it is used\n"
+          "[\033[31mfailed\033[0m] javascript a wonderful language\n"
+          "failed because it is not\n");
 
-      assert(actual == expected);
-
-      return true;
+      expect(actual).toEqual(expected);
     });
 
     it("reports the multiple testcases", [&]() {
-      TestRunner testRunner {};
+      TestRunner testRunner{};
 
       testRunner.add(std::make_unique<SuccessTestCase>());
       testRunner.add(std::make_unique<FailureTestCase>());
@@ -108,13 +115,12 @@ public:
       testRunner.run(resultsStream);
 
       const auto actual = results.str();
-      const auto expected =
-          std::string("[\033[32mpassed\033[0m] cat follows mice\n"
-                      "[\033[31mfailed\033[0m] javascript a wonderful language\n");
+      const auto expected = std::string(
+          "[\033[32mpassed\033[0m] Success Test Case: cat follows mice\n"
+          "[\033[31mfailed\033[0m] javascript a wonderful language\n"
+          "failed because js is not a wonderful language\n");
 
-      assert(actual == expected);
-
-      return true;
+      expect(actual).toEqual(expected);
     });
   }
 };
