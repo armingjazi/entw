@@ -2,6 +2,7 @@
 #include <Expect.h>
 #include <TestCase.h>
 #include <iostream>
+#include <cassert>
 
 namespace entw {
 class ExpectTestCase : public TestCase {
