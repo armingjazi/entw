@@ -1,8 +1,7 @@
 
 # entw #
 
-[![Build Status](https://travis-ci.org/tetrohed/entw.svg?branch=master)](https://travis-ci.org/tetrohed/entw)
-[![Build Status](https://travis-ci.org/tetrohed/entw.svg?branch=develop)](https://travis-ci.org/tetrohed/entw)
+![develop](https://github.com/tetrohed/entw/workflows/develop/badge.svg?branch=develop)
 
 Welcome to **entw Test**, A functional C++ test framework!
 
