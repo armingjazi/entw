@@ -3,7 +3,7 @@
 #include <ostream>
 #include <sstream>
 
-#include <Expect.h>
+#include <EqualityExpectation.h>
 #include <TestCase.h>
 #include <TestRunner.h>
 
@@ -14,39 +14,51 @@ public:
   SuccessTestCase() { setName("Success Test Case"); }
 
   void include() override {
-    it("cat follows mice", [&]() { return true; });
+    it(
+        "cat follows mice", [&](Expect &expect) {}, 0);
   }
 };
 
 class FailureTestCase : public TestCase {
 public:
   void include() override {
-    it("javascript a wonderful language", [&]() {
-      throw std::logic_error("failed because js is not a wonderful language");
-    });
+    it(
+        "javascript a wonderful language",
+        [&](Expect &expect) {
+          throw std::logic_error(
+              "failed because js is not a wonderful language");
+        },
+        0);
   }
 };
 
 class MixTestCase : public TestCase {
 public:
   void include() override {
-    it("cat follows mice", [&]() { return true; });
-    it("dogs follow cats", [&]() { return true; });
-    it("c++ is not used anymore", [&]() {
-      throw std::logic_error("failed because it is used");
-      ;
-    });
-    it("javascript a wonderful language", [&]() {
-      throw std::logic_error("failed because it is not");
-      ;
-    });
+    it(
+        "cat follows mice", [&](Expect &expect) {}, 0);
+    it(
+        "dogs follow cats", [&](Expect &expect) {}, 0);
+    it(
+        "c++ is not used anymore",
+        [&](Expect &expect) {
+          throw std::logic_error("failed because it is used");
+        },
+        0);
+    it(
+        "javascript a wonderful language",
+        [&](Expect &expect) {
+          throw std::logic_error("failed because it is not");
+          ;
+        },
+        0);
   }
 };
 
 class TestRunnerTestCase : public TestCase {
 public:
   void include() override {
-    it("reports the succeeded tests", [&]() {
+    it("reports the succeeded tests", [&](Expect &expect) {
       TestRunner testRunner{};
 
       testRunner.add(std::make_unique<SuccessTestCase>());
@@ -63,7 +75,7 @@ public:
       expect(actual).toEqual(expected);
     });
 
-    it("reports the failed tests", [&]() {
+    it("reports the failed tests", [&](Expect &expect) {
       TestRunner testRunner{};
 
       testRunner.add(std::make_unique<FailureTestCase>());
@@ -81,7 +93,7 @@ public:
       expect(actual).toEqual(expected);
     });
 
-    it("reports the multiple tests", [&]() {
+    it("reports the multiple tests", [&](Expect &expect) {
       TestRunner testRunner{};
 
       testRunner.add(std::make_unique<MixTestCase>());
@@ -103,7 +115,7 @@ public:
       expect(actual).toEqual(expected);
     });
 
-    it("reports the multiple testcases", [&]() {
+    it("reports the multiple testcases", [&](Expect &expect) {
       TestRunner testRunner{};
 
       testRunner.add(std::make_unique<SuccessTestCase>());

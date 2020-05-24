@@ -1,5 +1,6 @@
-#include "Report.h"
 #include "TestCase.h"
+#include "Report.h"
+#include "Test.h"
 
 namespace entw {
 ReportPtr TestCase::run() {
@@ -7,15 +8,17 @@ ReportPtr TestCase::run() {
   auto report = std::make_unique<Report>();
   for (auto &&test : tests_) {
     runBeforeEach();
-    report->add(test());
+    report->add((*test)());
     runAfterEach();
   }
   return report;
 }
-void TestCase::it(const std::string &name, const Test::It &method) {
-    tests_.emplace_back(name_.empty()? name : name_ + ": " + name, method);
+
+void TestCase::it(const std::string &name,
+                  const ITest::TestMethod &method, size_t assertions) {
+  tests_.emplace_back(std::make_unique<Test>(
+      name_.empty() ? name : name_ + ": " + name, method, assertions));
 }
-void TestCase::setName(const std::string &name) {
-  name_ = name;
-}
+
+void TestCase::setName(const std::string &name) { name_ = name; }
 } // namespace entw

@@ -1,21 +1,20 @@
 #pragma once
 
-#include <functional>
 #include <IResult.h>
+#include <functional>
 
 #include "ITest.h"
 
 namespace entw {
-class Test : ITest {
+class Test : public ITest {
 public:
-  using It = std::function<void(void) noexcept(false)>;
-
-  Test(std::string name, It function);
+  Test(std::string name, TestMethod function, size_t assertions = 1);
   ~Test() override = default;
   ResultPtr operator()() override;
 
 private:
   std::string name_;
-  It function_;
+  TestMethod function_;
+  size_t assertions_;
 };
 } // namespace entw

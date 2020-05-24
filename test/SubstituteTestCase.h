@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Expect.h>
+#include <EqualityExpectation.h>
 #include <Substitute.h>
 #include <TestCase.h>
 
@@ -26,63 +26,70 @@ public:
 class SubstituteTestCase : public TestCase {
 public:
   void include() override {
-    it("tracks the cardinality of methods that will be called", [&]() {
-      auto sub = SubstituteInterface();
+    it("tracks the cardinality of methods that will be called",
+       [&](Expect &expect) {
+         auto sub = SubstituteInterface();
 
-      sub.methodWithNoArg();
+         sub.methodWithNoArg();
 
-      expect(sub, &SubstituteInterface::methodWithNoArg)
-          .toHaveBeenCalled(1);
-    });
+         expect(sub, &SubstituteInterface::methodWithNoArg).toHaveBeenCalled(1);
+       });
 
-    it ("gives untracked methods a cardinality of 0", [&]() {
-      auto sub = SubstituteInterface();
+    it("gives untracked methods a cardinality of 0",
+       [&](Expect &expect) {
+         auto sub = SubstituteInterface();
 
-      expect(sub, &SubstituteInterface::anotherMethodWithNoArg)
-          .toHaveBeenCalled(0);
-    });
+         expect(sub, &SubstituteInterface::anotherMethodWithNoArg)
+             .toHaveBeenCalled(0);
+       });
 
-    it ("throws if method was called but cardinality was 0", [&]() {
-      auto sub = SubstituteInterface();
+    it(
+        "throws if method was called 0 cardinality was expected",
+        [&](Expect expect) {
+          auto sub = SubstituteInterface();
 
-      sub.methodWithNoArg();
+          sub.methodWithNoArg();
 
-      try {
-        expect(sub, &SubstituteInterface::methodWithNoArg)
-            .toHaveBeenCalled(0);
-      } catch (const std::exception &e) {
-        expect(std::string(e.what()))
-            .toEqual(std::string("Call Cardinality does not match\nexpected\n "
-                                 "0\nreceived\n 1"));
-      }
+          try {
+            expect(sub, &SubstituteInterface::methodWithNoArg)
+                .toHaveBeenCalled(0);
+          } catch (const std::exception &e) {
+            expect(std::string(e.what()))
+                .toEqual(
+                    std::string("Call Cardinality does not match\nexpected\n "
+                                "0\nreceived\n 1"));
+          }
+        },
+        0);
 
-    });
+    it("tracks the cardinality of methods that will be called",
+       [&](Expect &expect) {
+         auto sub = SubstituteInterface();
 
-    it("tracks the cardinality of methods that will be called", [&]() {
-      auto sub = SubstituteInterface();
+         sub.methodWithNoArg();
+         sub.methodWithNoArg();
 
-      sub.methodWithNoArg();
-      sub.methodWithNoArg();
+         expect(sub, &SubstituteInterface::methodWithNoArg).toHaveBeenCalled(2);
+       });
 
-      expect(sub, &SubstituteInterface::methodWithNoArg)
-          .toHaveBeenCalled(2);
-    });
+    it(
+        "throws if cardinality of registered method was not matched",
+        [&](Expect &expect) {
+          auto sub = SubstituteInterface();
 
+          sub.methodWithNoArg();
 
-    it("throws if cardinality of registered method was not matched", [&]() {
-      auto sub = SubstituteInterface();
-
-      sub.methodWithNoArg();
-
-      try {
-        expect(sub, &SubstituteInterface::methodWithNoArg)
-            .toHaveBeenCalled(2);
-      } catch (const std::exception &e) {
-        expect(std::string(e.what()))
-            .toEqual(std::string("Call Cardinality does not match\nexpected\n "
-                                 "2\nreceived\n 1"));
-      }
-    });
+          try {
+            expect(sub, &SubstituteInterface::methodWithNoArg)
+                .toHaveBeenCalled(2);
+          } catch (const std::exception &e) {
+            expect(std::string(e.what()))
+                .toEqual(
+                    std::string("Call Cardinality does not match\nexpected\n "
+                                "2\nreceived\n 1"));
+          }
+        },
+        2);
   }
 };
 } // namespace entw

@@ -1,16 +1,17 @@
 #pragma once
-#include <Expect.h>
+#include <EqualityExpectation.h>
 #include <TestCase.h>
-#include <iostream>
 #include <cassert>
+#include <iostream>
 
 namespace entw {
 class ExpectTestCase : public TestCase {
 public:
   void include() override {
-    it("expects success for equal number", [&]() { expect(50).toEqual(50); });
+    it("expects success for equal number",
+       [&](Expect &expect) { expect(50).toEqual(50); });
 
-    it("expects failure for non equal numbers", [&]() {
+    it("expects failure for non equal numbers", [&](Expect &expect) {
       try {
         expect(50).toEqual(51);
       } catch (const std::exception &e) {
@@ -19,10 +20,11 @@ public:
       }
     });
 
-    it("expects success for equal string",
-       [&]() { expect(std::string("test")).toEqual(std::string("test")); });
+    it("expects success for equal string", [&](Expect &expect) {
+      expect(std::string("test")).toEqual(std::string("test"));
+    });
 
-    it("expects failure for non equal string", [&]() {
+    it("expects failure for non equal string", [&](Expect &expect) {
       try {
         expect(std::string("badString")).toEqual(std::string("goodString"));
       } catch (const std::exception &e) {
@@ -31,7 +33,7 @@ public:
       }
     });
 
-    it("expects success equal pointers", [&]() {
+    it("expects success equal pointers", [&](Expect &expect) {
       class Cat {
         int meow = 0;
       };
@@ -42,7 +44,7 @@ public:
       expect(&data).toEqual(pointerToCat);
     });
 
-    it("expects fail with non equal pointers", [&]() {
+    it("expects fail with non equal pointers", [&](Expect &expect) {
       class Cat {
         int meow = 0;
       };
@@ -59,35 +61,33 @@ public:
       }
     });
 
-    it("supports not semantics", [&]() {
-      expect(50).notToEqual(51);
-    });
+    it("supports not semantics",
+       [&](Expect &expect) { expect(50).notToEqual(51); });
 
-    it("expects failure for equal numbers", [&]() {
+    it("expects failure for equal numbers", [&](Expect &expect) {
       try {
         expect(50).notToEqual((50));
       } catch (const std::exception &e) {
         assert(std::string(e.what()) ==
-            std::string("expected different values\nreceived equal values\n50"));
+               std::string(
+                   "expected different values\nreceived equal values\n50"));
       }
     });
 
-    it("expects failure for equal strings", [&]() {
+    it("expects failure for equal strings", [&](Expect &expect) {
       try {
         expect(std::string("test")).notToEqual((std::string("test")));
       } catch (const std::exception &e) {
         assert(std::string(e.what()) ==
-            std::string("expected different values\nreceived equal values\ntest"));
+               std::string(
+                   "expected different values\nreceived equal values\ntest"));
       }
     });
 
-    it("expects success with equal objects", [&]() {
+    it("expects success with equal objects", [&](Expect &expect) {
       class Comparable {
       public:
-        bool operator == (const Comparable& comp)
-        {
-          return true;
-        }
+        bool operator==(const Comparable &comp) { return true; }
       };
 
       const auto comparable = Comparable();
@@ -95,13 +95,10 @@ public:
       expect(comparable).toEqual(comparable);
     });
 
-    it("expects success with non equal objects", [&]() {
+    it("expects success with non equal objects", [&](Expect &expect) {
       class Comparable {
       public:
-        bool operator != (const Comparable& comp)
-        {
-          return true;
-        }
+        bool operator!=(const Comparable &comp) { return true; }
       };
 
       const auto comparable = Comparable();

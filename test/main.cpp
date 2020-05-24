@@ -1,11 +1,11 @@
-#include "TestCaseTestCase.h"
 #include "ExpectTestCase.h"
-#include "TestTestCase.h"
-#include "ResultTestCase.h"
-#include "TestRunnerTestCase.h"
-#include "TestRunner.h"
 #include "ReportTestCase.h"
+#include "ResultTestCase.h"
 #include "SubstituteTestCase.h"
+#include "TestCaseTestCase.h"
+#include "TestRunner.h"
+#include "TestRunnerTestCase.h"
+#include "TestTestCase.h"
 
 int main(int argc, char **argv) {
   entw::TestRunner testRunner{};

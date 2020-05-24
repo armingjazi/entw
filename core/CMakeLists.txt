@@ -1,4 +1,4 @@
-add_library(entw_core src/Report.cpp src/TestCase.cpp src/Test.cpp src/Result.cpp src/TestRunner.cpp)
+add_library(entw_core src/Report.cpp src/TestCase.cpp src/Test.cpp src/Result.cpp src/TestRunner.cpp src/Expect.cpp)
 
 target_include_directories(entw_core
         PUBLIC

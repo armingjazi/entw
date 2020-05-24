@@ -18,14 +18,14 @@ namespace entw {
 class ReportTestCase : public TestCase {
 public:
   void include() override {
-    it("reports the failures as full string", [&]() {
+    it("reports the failures as full string", [&](Expect &expect) {
       auto report = Report();
       report.add(std::make_unique<FailResultMock>());
 
       expect(report.full()).toEqual("string report");
     });
 
-    it("reports the number of failures", [&]() {
+    it("reports the number of failures", [&](Expect &expect) {
       auto report = Report();
       report.add(std::make_unique<FailResultMock>());
       report.add(std::make_unique<FailResultMock>());
