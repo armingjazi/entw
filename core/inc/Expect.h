@@ -12,9 +12,15 @@ public:
   };
 
   template <typename T>
-  CallExpectation<T> operator()(const T &object, void (T::*memberFunc)()) {
+  CallExpectation<T> operator()(const Substitute<T> &s, void (T::*memberFunc)()) {
     assertionCount_ += 1;
-    return CallExpectation<T>{object, memberFunc};
+    return CallExpectation<T>{s, memberFunc};
+  };
+
+  template <typename T>
+  CallExpectationWithArg<T> operator()(const Substitute<T> &s, void (T::*memberFunc)(int)) {
+    assertionCount_ += 1;
+    return CallExpectationWithArg<T>{s, memberFunc};
   };
 
   size_t getAssertionCount() const;
