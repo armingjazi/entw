@@ -4,10 +4,12 @@ project(entw VERSION "0.1")
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_library(entw INTERFACE)
+include(GNUInstallDirs)
 
-target_include_directories(entw INTERFACE include/)
+add_library(${PROJECT_NAME} INTERFACE)
+
+target_include_directories(${PROJECT_NAME} INTERFACE include/)
 
 add_subdirectory(test)
 
-target_sources(entw INTERFACE "$<BUILD_INTERFACE:${detail_header_files};${header_files}>")
+target_sources(${PROJECT_NAME} INTERFACE "$<BUILD_INTERFACE:${detail_header_files};${header_files}>")
