@@ -1,105 +1,66 @@
 #pragma once
-#include <assert.h>
 #include <memory>
 
+#include <EqualityExpectation.h>
 #include <TestCase.h>
+#include <iostream>
 
 namespace entw {
-class TestCaseUser : public TestCase {
- public:
-  void runBeforeEach() override {
-    beforeEachWasRun_ = true;
-  }
+class SucceedingTestCase : public TestCase {
+public:
+  void runBeforeEach() override { beforeEachWasRun_ = true; }
 
-  void runAfterEach() override {
-    afterEachWasRun_ = true;
-  }
+  void runAfterEach() override { afterEachWasRun_ = true; }
 
   void include() override {
-    it("was_run", [&]() {
-      wasRun_ = true;
-      return true;
-    });
-    it("was_second_run", [&]() {
-      secondTestWasRun_ = true;
-      return true;
-    });
+    it("was_run", [&](Expect &expect) { wasRun_ = true; });
+    it("was_second_run",
+       [&](Expect &expect) { secondTestWasRun_ = true; });
   }
 
   bool wasRun_ = false;
   bool secondTestWasRun_ = false;
   bool beforeEachWasRun_ = false;
   bool afterEachWasRun_ = false;
-
-};
-
-class FailingTestCase : public TestCase {
-  void include() override {
-    it("was_failed_1", [&]() {
-      return false;
-    });
-    it("was_failed_2", [&]() {
-      return false;
-    });
-  }
 };
 
 class TestCaseTestCase : public TestCase {
- private:
-  std::unique_ptr<TestCaseUser> testCaseUser_;
+private:
+  std::unique_ptr<SucceedingTestCase> testCaseUser_;
 
- public:
+public:
   void runBeforeEach() override {
-    testCaseUser_ = std::make_unique<TestCaseUser>();
+    testCaseUser_ = std::make_unique<SucceedingTestCase>();
   }
 
-  void runAfterEach() override {
-    testCaseUser_ = nullptr;
-  }
+  void runAfterEach() override { testCaseUser_ = nullptr; }
 
   void include() override {
-    it("runs_test", [&]() {
-      assert(!testCaseUser_->wasRun_);
+    it("runs_test", [&](Expect &expect) {
+      expect(testCaseUser_->wasRun_).toEqual(false);
       testCaseUser_->run();
-      assert(testCaseUser_->wasRun_);
-      return true;
-    });
+      expect(testCaseUser_->wasRun_).toEqual(true);
+    }, 2);
 
-    it("runs_beforeEach", [&]() {
-      assert(!testCaseUser_->beforeEachWasRun_);
+    it("runs_beforeEach", [&](Expect & expect) {
+      expect(testCaseUser_->beforeEachWasRun_).toEqual(false);
       testCaseUser_->run();
-      assert(testCaseUser_->beforeEachWasRun_);
-      return true;
-    });
+      expect(testCaseUser_->beforeEachWasRun_).toEqual(true);
+    }, 2);
 
-    it("runs_second_test", [&]() {
-      assert(!testCaseUser_->wasRun_);
-      assert(!testCaseUser_->secondTestWasRun_);
+    it("runs_second_test", [&](Expect & expect) {
+      expect(testCaseUser_->wasRun_).toEqual(false);
+      expect(testCaseUser_->secondTestWasRun_).toEqual(false);
       testCaseUser_->run();
-      assert(testCaseUser_->wasRun_);
-      assert(testCaseUser_->secondTestWasRun_);
-      return true;
-    });
+      expect(testCaseUser_->wasRun_).toEqual(true);
+      expect(testCaseUser_->secondTestWasRun_).toEqual(true);
+    }, 4);
 
-    it("runs_afterEach", [&]() {
-      assert(!testCaseUser_->afterEachWasRun_);
+    it("runs_afterEach", [&](Expect & expect) {
+      expect(testCaseUser_->afterEachWasRun_).toEqual(false);
       testCaseUser_->run();
-      assert(testCaseUser_->afterEachWasRun_);
-      return true;
-    });
-
-    it("fails", [&]() {
-      FailingTestCase failing_test_case;
-      const auto actual = failing_test_case.run().failures();
-      const auto expected = std::string("was_failed_1 test failed\nwas_failed_2 test failed");
-      assert(actual == expected);
-      return true;
-    });
-
-    it("succeeds", [&]() {
-      assert(testCaseUser_->run().failures() == "None");
-      return true;
-    });
+      expect(testCaseUser_->afterEachWasRun_).toEqual(true);
+    }, 2);
   }
 };
-}
+} // namespace entw

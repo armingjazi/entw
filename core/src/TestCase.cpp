@@ -1,20 +1,24 @@
-#include <TestCase.h>
-#include <map>
+#include "TestCase.h"
+#include "Report.h"
+#include "Test.h"
 
 namespace entw {
-Report TestCase::run() {
+ReportPtr TestCase::run() {
   include();
-  auto results = std::vector<std::string>();
+  auto report = std::make_unique<Report>();
   for (auto &&test : tests_) {
     runBeforeEach();
-    if (!test()) {
-      results.emplace_back(test.name() + " test failed");
-    }
+    report->add((*test)());
     runAfterEach();
   }
-  return Report(results);
+  return report;
 }
-void TestCase::it(const std::string& name, const TestCase::test &method) {
-  tests_.emplace_back(name, method);
+
+void TestCase::it(const std::string &name,
+                  const ITest::TestMethod &method, size_t assertions) {
+  tests_.emplace_back(std::make_unique<Test>(
+      name_.empty() ? name : name_ + ": " + name, method, assertions));
 }
+
+void TestCase::setName(const std::string &name) { name_ = name; }
 } // namespace entw

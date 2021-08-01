@@ -1,29 +1,20 @@
-#include <utility>
-
 #pragma once
 
+#include <IResult.h>
 #include <functional>
 
+#include "ITest.h"
+
 namespace entw {
-class Test {
- public:
-  using signature = std::function<bool(void)>;
+class Test : public ITest {
+public:
+  Test(std::string name, TestMethod function, size_t assertions = 1);
+  ~Test() override = default;
+  ResultPtr operator()() override;
 
-  Test(std::string name, const signature &function)
-      : name_(std::move(name)),
-        function_(std::move(function)) {
-  }
-
-  std::string name() {
-    return name_;
-  }
-
-  bool operator()() {
-    return function_();
-  }
-
- private:
+private:
   std::string name_;
-  std::function<bool(void)> function_;
+  TestMethod function_;
+  size_t assertions_;
 };
 } // namespace entw

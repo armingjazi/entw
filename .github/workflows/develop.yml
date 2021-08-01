@@ -1,0 +1,19 @@
+name: develop
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  build-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: mkdir cmake-build && cd cmake-build && cmake ../
+    - name: make
+      run: cd cmake-build && cmake --build .
+    - name: tests
+      run: cd cmake-build/test/ && ./run_all_tests
