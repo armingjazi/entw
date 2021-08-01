@@ -1,6 +1,6 @@
 #include <stdexcept>
 #include <string>
-#include <Substitute.h>
+#include "Substitute.h"
 
 namespace entw {
 template <typename T> class CallExpectation {

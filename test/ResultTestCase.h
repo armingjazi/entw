@@ -1,12 +1,12 @@
 #pragma once
-#include <Result.h>
-#include <TestCase.h>
+#include "Result.h"
+#include "TestCase.h"
 
 namespace entw {
 class ResultTestCase : public TestCase {
 public:
   void include() override {
-    it(
+    test(
         "reports the failed results with reason of failure",
         [&](Expect &expect) {
           Result result(false, "test", "it had to");
@@ -16,7 +16,7 @@ public:
         },
         2);
 
-    it(
+    test(
         "reports the success results",
         [&](Expect &expect) {
           Result result(true, "another test");

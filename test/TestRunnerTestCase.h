@@ -3,9 +3,9 @@
 #include <ostream>
 #include <sstream>
 
-#include <EqualityExpectation.h>
-#include <TestCase.h>
-#include <TestRunner.h>
+#include "EqualityExpectation.h"
+#include "TestCase.h"
+#include "TestRunner.h"
 
 namespace entw {
 
@@ -14,7 +14,7 @@ public:
   SuccessTestCase() { setName("Success Test Case"); }
 
   void include() override {
-    it(
+    test(
         "cat follows mice", [&](Expect &expect) {}, 0);
   }
 };
@@ -22,7 +22,7 @@ public:
 class FailureTestCase : public TestCase {
 public:
   void include() override {
-    it(
+    test(
         "javascript a wonderful language",
         [&](Expect &expect) {
           throw std::logic_error(
@@ -35,21 +35,20 @@ public:
 class MixTestCase : public TestCase {
 public:
   void include() override {
-    it(
+    test(
         "cat follows mice", [&](Expect &expect) {}, 0);
-    it(
+    test(
         "dogs follow cats", [&](Expect &expect) {}, 0);
-    it(
+    test(
         "c++ is not used anymore",
         [&](Expect &expect) {
           throw std::logic_error("failed because it is used");
         },
         0);
-    it(
+    test(
         "javascript a wonderful language",
         [&](Expect &expect) {
-          throw std::logic_error("failed because it is not");
-          ;
+          throw std::logic_error("failed because it is not");;
         },
         0);
   }
@@ -58,7 +57,7 @@ public:
 class TestRunnerTestCase : public TestCase {
 public:
   void include() override {
-    it("reports the succeeded tests", [&](Expect &expect) {
+    test("reports the succeeded tests", [&](Expect &expect) {
       TestRunner testRunner{};
 
       testRunner.add(std::make_unique<SuccessTestCase>());
@@ -75,7 +74,7 @@ public:
       expect(actual).toEqual(expected);
     });
 
-    it("reports the failed tests", [&](Expect &expect) {
+    test("reports the failed tests", [&](Expect &expect) {
       TestRunner testRunner{};
 
       testRunner.add(std::make_unique<FailureTestCase>());
@@ -93,7 +92,7 @@ public:
       expect(actual).toEqual(expected);
     });
 
-    it("reports the multiple tests", [&](Expect &expect) {
+    test("reports the multiple tests", [&](Expect &expect) {
       TestRunner testRunner{};
 
       testRunner.add(std::make_unique<MixTestCase>());
@@ -115,7 +114,7 @@ public:
       expect(actual).toEqual(expected);
     });
 
-    it("reports the multiple testcases", [&](Expect &expect) {
+    test("reports the multiple testcases", [&](Expect &expect) {
       TestRunner testRunner{};
 
       testRunner.add(std::make_unique<SuccessTestCase>());

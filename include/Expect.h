@@ -22,8 +22,8 @@ public:
     assertionCount_ += 1;
     return CallExpectationWithArg<T>{s, memberFunc};
   };
-
-  size_t getAssertionCount() const;
+  
+  size_t getAssertionCount() const { return assertionCount_; }
 
 private:
   size_t assertionCount_ = 0;

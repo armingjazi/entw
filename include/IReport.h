@@ -1,5 +1,5 @@
 #pragma once
-#include <IResult.h>
+#include "IResult.h"
 
 namespace entw {
 class IReport {

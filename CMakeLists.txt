@@ -4,6 +4,10 @@ project(entw VERSION "0.1")
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_subdirectory(core)
+add_library(entw INTERFACE)
+
+target_include_directories(entw INTERFACE include/)
 
 add_subdirectory(test)
+
+target_sources(entw INTERFACE "$<BUILD_INTERFACE:${detail_header_files};${header_files}>")

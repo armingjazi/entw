@@ -1,8 +1,8 @@
 #pragma once
 
-#include <EqualityExpectation.h>
-#include <Substitute.h>
-#include <TestCase.h>
+#include "EqualityExpectation.h"
+#include "Substitute.h"
+#include "TestCase.h"
 
 namespace entw {
 
@@ -37,22 +37,22 @@ public:
 class SubstituteTestCase : public TestCase {
 public:
   void include() override {
-    it("tracks the cardinality of methods that have been called",
-       [&](Expect &expect) {
-         auto sub = SubstituteClass();
+    test("tracks the cardinality of methods that have been called",
+         [&](Expect &expect) {
+           auto sub = SubstituteClass();
 
-         sub.methodWithNoArg();
+           sub.methodWithNoArg();
 
-         expect(sub, &SubstituteClass::methodWithNoArg).toHaveBeenCalled(1);
-       });
+           expect(sub, &SubstituteClass::methodWithNoArg).toHaveBeenCalled(1);
+         });
 
-    it("gives untracked methods a cardinality of 0", [&](Expect &expect) {
+    test("gives untracked methods a cardinality of 0", [&](Expect &expect) {
       auto sub = SubstituteClass();
 
       expect(sub, &SubstituteClass::anotherMethodWithNoArg).toHaveBeenCalled(0);
     });
 
-    it(
+    test(
         "throws if method was called 0 cardinality was expected",
         [&](Expect expect) {
           auto sub = SubstituteClass();
@@ -70,17 +70,17 @@ public:
         },
         0);
 
-    it("tracks the cardinality of methods that have been called",
-       [&](Expect &expect) {
-         auto sub = SubstituteClass();
+    test("tracks the cardinality of methods that have been called",
+         [&](Expect &expect) {
+           auto sub = SubstituteClass();
 
-         sub.methodWithNoArg();
-         sub.methodWithNoArg();
+           sub.methodWithNoArg();
+           sub.methodWithNoArg();
 
-         expect(sub, &SubstituteClass::methodWithNoArg).toHaveBeenCalled(2);
-       });
+           expect(sub, &SubstituteClass::methodWithNoArg).toHaveBeenCalled(2);
+         });
 
-    it(
+    test(
         "throws if cardinality of registered method was not matched",
         [&](Expect &expect) {
           auto sub = SubstituteClass();
@@ -98,7 +98,7 @@ public:
         },
         2);
 
-    it("tracks the argument of methods", [&](Expect &expect) {
+    test("tracks the argument of methods", [&](Expect &expect) {
       auto sub = SubstituteClass();
 
       sub.methodWithOneArg(10);
@@ -107,7 +107,7 @@ public:
           .toHaveBeenCalledWith(0, 10);
     });
 
-    it(
+    test(
         "tracks the argument of methods for multiple calls",
         [&](Expect &expect) {
           auto sub = SubstituteClass();
@@ -124,7 +124,7 @@ public:
         },
         2);
 
-    it(
+    test(
         "throws for non matching arguments with actual call",
         [&](Expect &expect) {
           auto sub = SubstituteClass();
@@ -144,7 +144,7 @@ public:
         },
         2);
 
-    it(
+    test(
         "throws for mismatched call number for registered call",
         [&](Expect &expect) {
           auto sub = SubstituteClass();
@@ -162,7 +162,7 @@ public:
         },
         2);
 
-    it(
+    test(
         "tracks call numbers for multiple methods",
         [&](Expect &expect) {
           auto sub = SubstituteClass();
@@ -177,7 +177,7 @@ public:
         },
         2);
 
-    it(
+    test(
         "throws if the argument was not matched",
         [&](Expect &expect) {
           auto sub = SubstituteClass();

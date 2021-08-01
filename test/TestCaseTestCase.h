@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
 
-#include <EqualityExpectation.h>
-#include <TestCase.h>
+#include "EqualityExpectation.h"
+#include "TestCase.h"
 #include <iostream>
 
 namespace entw {
@@ -13,8 +13,8 @@ public:
   void runAfterEach() override { afterEachWasRun_ = true; }
 
   void include() override {
-    it("was_run", [&](Expect &expect) { wasRun_ = true; });
-    it("was_second_run",
+    test("was_run", [&](Expect &expect) { wasRun_ = true; });
+    test("was_second_run",
        [&](Expect &expect) { secondTestWasRun_ = true; });
   }
 
@@ -36,19 +36,19 @@ public:
   void runAfterEach() override { testCaseUser_ = nullptr; }
 
   void include() override {
-    it("runs_test", [&](Expect &expect) {
+    test("runs_test", [&](Expect &expect) {
       expect(testCaseUser_->wasRun_).toEqual(false);
       testCaseUser_->run();
       expect(testCaseUser_->wasRun_).toEqual(true);
     }, 2);
 
-    it("runs_beforeEach", [&](Expect & expect) {
+    test("runs_beforeEach", [&](Expect &expect) {
       expect(testCaseUser_->beforeEachWasRun_).toEqual(false);
       testCaseUser_->run();
       expect(testCaseUser_->beforeEachWasRun_).toEqual(true);
     }, 2);
 
-    it("runs_second_test", [&](Expect & expect) {
+    test("runs_second_test", [&](Expect &expect) {
       expect(testCaseUser_->wasRun_).toEqual(false);
       expect(testCaseUser_->secondTestWasRun_).toEqual(false);
       testCaseUser_->run();
@@ -56,7 +56,7 @@ public:
       expect(testCaseUser_->secondTestWasRun_).toEqual(true);
     }, 4);
 
-    it("runs_afterEach", [&](Expect & expect) {
+    test("runs_afterEach", [&](Expect &expect) {
       expect(testCaseUser_->afterEachWasRun_).toEqual(false);
       testCaseUser_->run();
       expect(testCaseUser_->afterEachWasRun_).toEqual(true);
